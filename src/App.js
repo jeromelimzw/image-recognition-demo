@@ -13,8 +13,7 @@ class App extends Component {
   constructor() {
     super();
     this.state = {
-      input:
-        "https://peopledotcom.files.wordpress.com/2018/12/books-8.jpg?crop=0px%2C13px%2C2700px%2C1419px&resize=1200%2C630",
+      input: "",
       imageUrl: "",
       box: {}
     };
