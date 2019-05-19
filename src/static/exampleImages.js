@@ -15,7 +15,7 @@ const images = [
 ];
 
 const randomImage = () => {
-  return images[Math.round(Math.random() * images.length + 1)];
+  return images[Math.floor(Math.random() * (images.length - 1))];
 };
 
 export default randomImage;
