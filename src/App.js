@@ -3,9 +3,7 @@ import Clarifai from "clarifai";
 import ImageRecognition from "./components/FaceRecognition";
 import ImageInputForm from "./components/ImageInput";
 import "./App.css";
-import { Button } from "semantic-ui-react";
 import randomImage from "./static/exampleImages";
-//You must add your own API key here from Clarifai.
 const app = new Clarifai.App({
   apiKey: process.env.REACT_APP_CLARIFAI_KEY
 });
@@ -40,31 +38,31 @@ class App extends Component {
     this.setState({ box });
   };
 
-  handleInput = event => {
-    this.setState({ input: event.target.value });
+  handleInput = async event => {
+    await this.setState({ input: event.target.value });
+    await this.setState({ imageUrl: this.state.input });
+    this.setState({ box: {} });
   };
 
-  handleSubmit = () => {
-    if (this.state.password !== process.env.REACT_APP_KEY)
-      return alert("password is required");
-    this.setState({ imageUrl: this.state.input });
-    app.models
-      .predict(Clarifai.FACE_DETECT_MODEL, this.state.input)
-      .then(response => {
-        this.drawBoxes(this.locateFace(response));
-      })
-
-      .catch(err => {
-        alert("no face detected");
-        this.setState({ box: {} });
-      });
+  handleSubmit = async () => {
+    if (this.state.password !== key) return alert("password is required");
+    try {
+      const response = await app.models.predict(
+        Clarifai.FACE_DETECT_MODEL,
+        this.state.input
+      );
+      await this.drawBoxes(this.locateFace(response));
+    } catch (error) {
+      alert("no face detected");
+      this.setState({ box: {} });
+    }
   };
 
   handleRandom = async () => {
-    await this.setState({ input: "" });
     await this.setState({
       input: randomImage()
     });
+    await this.setState({ imageUrl: this.state.input });
     await this.handleSubmit();
   };
 
